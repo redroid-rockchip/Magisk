@@ -635,7 +635,7 @@ impl FsPath {
         unsafe {
             libc::lstat(self.as_ptr(), &mut attr.st).as_os_err()?;
 
-            #[cfg(feature = "selinux")]
+            /*#[cfg(feature = "selinux")]
             {
                 let sz = libc::lgetxattr(
                     self.as_ptr(),
@@ -645,7 +645,7 @@ impl FsPath {
                 )
                 .check_os_err()?;
                 attr.con.set_len((sz - 1) as usize);
-            }
+            }*/
         }
         Ok(attr)
     }
@@ -657,7 +657,7 @@ impl FsPath {
             }
             libc::lchown(self.as_ptr(), attr.st.st_uid, attr.st.st_gid).as_os_err()?;
 
-            #[cfg(feature = "selinux")]
+            /*#[cfg(feature = "selinux")]
             if !attr.con.is_empty() {
                 libc::lsetxattr(
                     self.as_ptr(),
@@ -667,7 +667,7 @@ impl FsPath {
                     0,
                 )
                 .as_os_err()?;
-            }
+            }*/
         }
         Ok(())
     }
@@ -731,7 +731,7 @@ pub fn fd_get_attr(fd: RawFd) -> io::Result<FileAttr> {
     unsafe {
         libc::fstat(fd, &mut attr.st).as_os_err()?;
 
-        #[cfg(feature = "selinux")]
+        /*#[cfg(feature = "selinux")]
         {
             let sz = libc::fgetxattr(
                 fd,
@@ -741,7 +741,7 @@ pub fn fd_get_attr(fd: RawFd) -> io::Result<FileAttr> {
             )
             .check_os_err()?;
             attr.con.set_len((sz - 1) as usize);
-        }
+        }*/
     }
     Ok(attr)
 }
@@ -751,7 +751,7 @@ pub fn fd_set_attr(fd: RawFd, attr: &FileAttr) -> io::Result<()> {
         libc::fchmod(fd, (attr.st.st_mode & 0o777).as_()).as_os_err()?;
         libc::fchown(fd, attr.st.st_uid, attr.st.st_gid).as_os_err()?;
 
-        #[cfg(feature = "selinux")]
+        /*#[cfg(feature = "selinux")]
         if !attr.con.is_empty() {
             libc::fsetxattr(
                 fd,
@@ -761,7 +761,7 @@ pub fn fd_set_attr(fd: RawFd, attr: &FileAttr) -> io::Result<()> {
                 0,
             )
             .as_os_err()?;
-        }
+        }*/
     }
     Ok(())
 }
